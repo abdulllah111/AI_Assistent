@@ -8,8 +8,8 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using TelegramBot.AI;
 using RestSharp;
+using TelegramBot.Client;
 
 
 namespace TelegramBot
@@ -19,6 +19,7 @@ namespace TelegramBot
     {
         private readonly long _chatId;
         private ITelegramBotClient _botClient;
+        private GrpcClient _grpcClient;
         private CancellationTokenSource _cts = new CancellationTokenSource();
 
         // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
@@ -27,10 +28,11 @@ namespace TelegramBot
             AllowedUpdates = Array.Empty<UpdateType>() // receive all update types except ChatMember related updates
         };
 
-        public Bot(string bot_token, long chat_id, WebProxy proxy = null)
+        public Bot(string bot_token, long chat_id, GrpcClient grpcClient,WebProxy proxy = null)
         {
             _botClient = new TelegramBotClient(bot_token);
             _chatId = chat_id;
+            _grpcClient = grpcClient;
         }
 
         public async Task Start(){
@@ -65,15 +67,36 @@ namespace TelegramBot
             //Только в выбранном чате
             if(message.Chat.Id != _chatId)
                 return;
+            
 
+            var isExist = await IsMessageExistsAsync(_botClient, message);
+            if(!isExist)
+                return;
 
-            // Echo received message text
-            Message sentMessage = await _botClient.SendTextMessageAsync(
+            var chatMember = await _botClient.GetChatMemberAsync(message.Chat.Id, message.From.Id);
+            if(chatMember.Status == ChatMemberStatus.Kicked)
+                return;
+            
+            string response = await _grpcClient.SendMessage(messageText);
+            Console.WriteLine("Response: " + response);
+            
+
+            try
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
                 chatId: _chatId,
                 text: messageText,
                 cancellationToken: cancellationToken,
                 replyToMessageId: message.MessageId
             );
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            // Echo received message text
+           
 
             await Task.Delay(10);
 
@@ -92,5 +115,20 @@ namespace TelegramBot
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
         }
+
+        private async Task<bool> IsMessageExistsAsync(ITelegramBotClient botClient, Message message)
+        {
+            try
+            {
+                // Получаем информацию о пользователе, отправившем сообщение
+                await botClient.GetChatMemberAsync(message.Chat.Id, message.From.Id);
+                return true; // Сообщение существует
+            }
+            catch (ApiRequestException ex) when (ex.ErrorCode == 400 && ex.Message.Contains("ChatMemberNotFoundException"))
+            {
+                return false; // Сообщение не существует
+            }
+        }
+
     }
 }
