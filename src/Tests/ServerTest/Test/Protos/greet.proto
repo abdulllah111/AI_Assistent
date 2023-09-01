@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Test";
+
+package greet;
+
+service AiService {
+  rpc SendMessage(PromtRequest) returns (PromtResponse) {}
+}
+
+message PromtRequest {
+  string message = 1;
+}
+
+message PromtResponse {
+  string response = 1;
+}
