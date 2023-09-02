@@ -76,25 +76,18 @@ namespace TelegramBot
             var chatMember = await _botClient.GetChatMemberAsync(message.Chat.Id, message.From.Id);
             if(chatMember.Status == ChatMemberStatus.Kicked)
                 return;
-            
+
             string response = await _grpcClient.SendMessage(messageText);
             Console.WriteLine("Response: " + response);
             
 
-            try
-            {
-                Message sentMessage = await _botClient.SendTextMessageAsync(
-                chatId: _chatId,
-                text: messageText,
-                cancellationToken: cancellationToken,
-                replyToMessageId: message.MessageId
+            Message sentMessage = await _botClient.SendTextMessageAsync(
+            chatId: _chatId,
+            text: response,
+            cancellationToken: cancellationToken
+            // replyToMessageId: message.MessageId
             );
-            }
-            catch (System.Exception)
-            {
-                
-                throw;
-            }
+
             // Echo received message text
            
 

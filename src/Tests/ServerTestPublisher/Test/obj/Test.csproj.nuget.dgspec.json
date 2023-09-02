@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTest/Test/Test.csproj": {}
+    "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTestPublisher/Test/Test.csproj": {}
   },
   "projects": {
-    "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTest/Test/Test.csproj": {
+    "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTestPublisher/Test/Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTest/Test/Test.csproj",
+        "projectUniqueName": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTestPublisher/Test/Test.csproj",
         "projectName": "Test",
-        "projectPath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTest/Test/Test.csproj",
+        "projectPath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTestPublisher/Test/Test.csproj",
         "packagesPath": "/home/abdul/.nuget/packages/",
-        "outputPath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTest/Test/obj/",
+        "outputPath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Tests/ServerTestPublisher/Test/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/abdul/.nuget/NuGet/NuGet.Config"
