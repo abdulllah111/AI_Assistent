@@ -22,10 +22,9 @@ namespace TelegramBot
         private GrpcClient _grpcClient;
         private CancellationTokenSource _cts = new CancellationTokenSource();
 
-        // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
         private ReceiverOptions receiverOptions = new ()
         {
-            AllowedUpdates = Array.Empty<UpdateType>() // receive all update types except ChatMember related updates
+            AllowedUpdates = Array.Empty<UpdateType>()
         };
 
         public Bot(string bot_token, long chat_id, GrpcClient grpcClient,WebProxy proxy = null)
@@ -87,8 +86,6 @@ namespace TelegramBot
             cancellationToken: cancellationToken
             // replyToMessageId: message.MessageId
             );
-
-            // Echo received message text
            
 
             await Task.Delay(10);

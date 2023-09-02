@@ -20,11 +20,6 @@ public class ServiceAI : AiService.AiServiceBase
 
     public override async Task<PromtResponse> SendMessage(PromtRequest request, ServerCallContext context)
     {
-        // // Отправить сообщение в RabbitMQ
-        // rabbitMQClient.SendMessage(request.Message);
-
-        // // Дождаться ответа от Python-приложения
-        // string response = await rabbitMQClient.ReceiveMessage();
 
         string response = await rabbitMQClient.SendMessageAsync(request.Message);
 
