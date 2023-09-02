@@ -83,8 +83,8 @@ namespace TelegramBot
             Message sentMessage = await _botClient.SendTextMessageAsync(
             chatId: _chatId,
             text: response,
-            cancellationToken: cancellationToken
-            // replyToMessageId: message.MessageId
+            cancellationToken: cancellationToken,
+            replyToMessageId: message.MessageId
             );
            
 
