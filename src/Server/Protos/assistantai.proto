@@ -1,17 +1,19 @@
 syntax = "proto3";
 
-option csharp_namespace = "TelegramBot";
+option csharp_namespace = "Server";
 
-package greet;
+package assistantai;
 
-service AiService {
+service TelegramClientService {
   rpc SendMessage(PromtRequest) returns (PromtResponse) {}
 }
 
 message PromtRequest {
   string message = 1;
+  string userid = 2;
 }
 
 message PromtResponse {
   string response = 1;
+  string userid = 2;
 }

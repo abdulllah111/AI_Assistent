@@ -1,0 +1,2 @@
+obj/Debug/net7.0/Protos/Assistantai.cs \
+obj/Debug/net7.0/Protos/AssistantaiGrpc.cs: Protos/assistantai.proto

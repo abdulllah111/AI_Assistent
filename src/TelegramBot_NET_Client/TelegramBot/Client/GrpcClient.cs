@@ -5,7 +5,7 @@ namespace TelegramBot.Client;
 
 public class GrpcClient
 {
-    private readonly AiService.AiServiceClient  _client;
+    private readonly TelegramClientService.TelegramClientServiceClient  _client;
 
     public GrpcClient()
     {
@@ -13,12 +13,12 @@ public class GrpcClient
         httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
         var channel = GrpcChannel.ForAddress("https://localhost:7241", new GrpcChannelOptions { HttpHandler = httpHandler }); // Замените на адрес вашего gRPC-сервиса
-        _client = new AiService.AiServiceClient(channel);
+        _client = new TelegramClientService.TelegramClientServiceClient(channel);
     }
     
-    public async Task<string> SendMessage(string message)
+    public async Task<string> SendMessage(string message, string userId)
     {
-        var request = new PromtRequest { Message = message };
+        var request = new PromtRequest { Message = message, Userid = userId };
         var response = await _client.SendMessageAsync(request);
         return response.Response;
     }

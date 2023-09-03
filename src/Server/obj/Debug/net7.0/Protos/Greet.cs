@@ -24,16 +24,17 @@ namespace Server {
     static GreetReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJQcm90b3MvZ3JlZXQucHJvdG8SBWdyZWV0Ih8KDFByb210UmVxdWVzdBIP",
-            "CgdtZXNzYWdlGAEgASgJIiEKDVByb210UmVzcG9uc2USEAoIcmVzcG9uc2UY",
-            "ASABKAkyRwoJQWlTZXJ2aWNlEjoKC1NlbmRNZXNzYWdlEhMuZ3JlZXQuUHJv",
-            "bXRSZXF1ZXN0GhQuZ3JlZXQuUHJvbXRSZXNwb25zZSIAQgmqAgZTZXJ2ZXJi",
-            "BnByb3RvMw=="));
+            "ChJQcm90b3MvZ3JlZXQucHJvdG8SC2Fzc2lzdGFudGFpIi8KDFByb210UmVx",
+            "dWVzdBIPCgdtZXNzYWdlGAEgASgJEg4KBnVzZXJpZBgCIAEoAyIxCg1Qcm9t",
+            "dFJlc3BvbnNlEhAKCHJlc3BvbnNlGAEgASgJEg4KBnVzZXJpZBgCIAEoAzJf",
+            "ChVUZWxlZ3JhbUNsaWVudFNlcnZpY2USRgoLU2VuZE1lc3NhZ2USGS5hc3Np",
+            "c3RhbnRhaS5Qcm9tdFJlcXVlc3QaGi5hc3Npc3RhbnRhaS5Qcm9tdFJlc3Bv",
+            "bnNlIgBCCaoCBlNlcnZlcmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Server.PromtRequest), global::Server.PromtRequest.Parser, new[]{ "Message" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Server.PromtResponse), global::Server.PromtResponse.Parser, new[]{ "Response" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.PromtRequest), global::Server.PromtRequest.Parser, new[]{ "Message", "Userid" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.PromtResponse), global::Server.PromtResponse.Parser, new[]{ "Response", "Userid" }, null, null, null, null)
           }));
     }
     #endregion
@@ -75,6 +76,7 @@ namespace Server {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public PromtRequest(PromtRequest other) : this() {
       message_ = other.message_;
+      userid_ = other.userid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -96,6 +98,18 @@ namespace Server {
       }
     }
 
+    /// <summary>Field number for the "userid" field.</summary>
+    public const int UseridFieldNumber = 2;
+    private long userid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long Userid {
+      get { return userid_; }
+      set {
+        userid_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -112,6 +126,7 @@ namespace Server {
         return true;
       }
       if (Message != other.Message) return false;
+      if (Userid != other.Userid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -120,6 +135,7 @@ namespace Server {
     public override int GetHashCode() {
       int hash = 1;
       if (Message.Length != 0) hash ^= Message.GetHashCode();
+      if (Userid != 0L) hash ^= Userid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -142,6 +158,10 @@ namespace Server {
         output.WriteRawTag(10);
         output.WriteString(Message);
       }
+      if (Userid != 0L) {
+        output.WriteRawTag(16);
+        output.WriteInt64(Userid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -156,6 +176,10 @@ namespace Server {
         output.WriteRawTag(10);
         output.WriteString(Message);
       }
+      if (Userid != 0L) {
+        output.WriteRawTag(16);
+        output.WriteInt64(Userid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -168,6 +192,9 @@ namespace Server {
       int size = 0;
       if (Message.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
+      }
+      if (Userid != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Userid);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -183,6 +210,9 @@ namespace Server {
       }
       if (other.Message.Length != 0) {
         Message = other.Message;
+      }
+      if (other.Userid != 0L) {
+        Userid = other.Userid;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -203,6 +233,10 @@ namespace Server {
             Message = input.ReadString();
             break;
           }
+          case 16: {
+            Userid = input.ReadInt64();
+            break;
+          }
         }
       }
     #endif
@@ -220,6 +254,10 @@ namespace Server {
             break;
           case 10: {
             Message = input.ReadString();
+            break;
+          }
+          case 16: {
+            Userid = input.ReadInt64();
             break;
           }
         }
@@ -264,6 +302,7 @@ namespace Server {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public PromtResponse(PromtResponse other) : this() {
       response_ = other.response_;
+      userid_ = other.userid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -285,6 +324,18 @@ namespace Server {
       }
     }
 
+    /// <summary>Field number for the "userid" field.</summary>
+    public const int UseridFieldNumber = 2;
+    private long userid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long Userid {
+      get { return userid_; }
+      set {
+        userid_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -301,6 +352,7 @@ namespace Server {
         return true;
       }
       if (Response != other.Response) return false;
+      if (Userid != other.Userid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -309,6 +361,7 @@ namespace Server {
     public override int GetHashCode() {
       int hash = 1;
       if (Response.Length != 0) hash ^= Response.GetHashCode();
+      if (Userid != 0L) hash ^= Userid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -331,6 +384,10 @@ namespace Server {
         output.WriteRawTag(10);
         output.WriteString(Response);
       }
+      if (Userid != 0L) {
+        output.WriteRawTag(16);
+        output.WriteInt64(Userid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -345,6 +402,10 @@ namespace Server {
         output.WriteRawTag(10);
         output.WriteString(Response);
       }
+      if (Userid != 0L) {
+        output.WriteRawTag(16);
+        output.WriteInt64(Userid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -357,6 +418,9 @@ namespace Server {
       int size = 0;
       if (Response.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Response);
+      }
+      if (Userid != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Userid);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -372,6 +436,9 @@ namespace Server {
       }
       if (other.Response.Length != 0) {
         Response = other.Response;
+      }
+      if (other.Userid != 0L) {
+        Userid = other.Userid;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -392,6 +459,10 @@ namespace Server {
             Response = input.ReadString();
             break;
           }
+          case 16: {
+            Userid = input.ReadInt64();
+            break;
+          }
         }
       }
     #endif
@@ -409,6 +480,10 @@ namespace Server {
             break;
           case 10: {
             Response = input.ReadString();
+            break;
+          }
+          case 16: {
+            Userid = input.ReadInt64();
             break;
           }
         }

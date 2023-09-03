@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="TelegramBotClient" />
+    <Protobuf Include="Protos\assistantai.proto" GrpcServices="TelegramBotClient" />
     <PackageReference Include="Google.Protobuf" Version="3.24.2" />
     <PackageReference Include="Grpc.Net.Client" Version="2.56.0" />
     <PackageReference Include="Grpc.Tools" Version="2.57.0">

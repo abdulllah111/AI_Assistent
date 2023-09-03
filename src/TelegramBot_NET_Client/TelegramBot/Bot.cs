@@ -60,7 +60,7 @@ namespace TelegramBot
             if (message.Text is not { } messageText)
                 return;
             
-            Console.WriteLine($"Received a '{messageText}' message in chat {message.Chat.Id }.");
+            Console.WriteLine($"Received a '{messageText}' message in chat {message.Chat.Id } to {message.From.Id}.");
 
 
             //Только в выбранном чате
@@ -76,7 +76,7 @@ namespace TelegramBot
             if(chatMember.Status == ChatMemberStatus.Kicked)
                 return;
 
-            string response = await _grpcClient.SendMessage(messageText);
+            string response = await _grpcClient.SendMessage(messageText, message.From.Id.ToString());
             Console.WriteLine("Response: " + response);
             
 

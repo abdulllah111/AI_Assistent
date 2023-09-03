@@ -1,3 +1,4 @@
+using Google.Protobuf;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -34,12 +35,14 @@ public class RabbitMQClient
                           arguments: null);
   }
 
-  public async Task<string> SendMessageAsync(string message)
+  public async Task<string> SendMessageAsync(PromtRequest request)
   {
     var props = _channel.CreateBasicProperties();
     props.CorrelationId = Guid.NewGuid().ToString();
     
-    var body = Encoding.UTF8.GetBytes(message);
+    // var body = Encoding.UTF8.GetBytes(message);
+    var body = request.ToByteArray();
+
 
     _channel.BasicPublish(exchange: "",
                           routingKey: REQUEST_QUEUE,

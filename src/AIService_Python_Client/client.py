@@ -1,5 +1,6 @@
 import pika
 import gpt
+from Protos.assistantai_pb2 import PromtRequest
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
@@ -9,9 +10,10 @@ channel.queue_declare(queue='request_queue')
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
     
-    # обработать запрос
+    message = PromtRequest()
+    message.ParseFromString(body)
     
-    response = gpt.Generate(body)
+    response = gpt.Generate(message.message, message.userid)
     
     
     ch.basic_publish(exchange='',

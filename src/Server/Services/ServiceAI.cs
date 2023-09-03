@@ -7,7 +7,7 @@ using Server.Rabbitmq;
 
 namespace Server.Services;
 
-public class ServiceAI : AiService.AiServiceBase
+public class ServiceAI : TelegramClientService.TelegramClientServiceBase
 {
     private readonly ILogger<ServiceAI> _logger;
     private readonly RabbitMQClient rabbitMQClient;
@@ -21,7 +21,7 @@ public class ServiceAI : AiService.AiServiceBase
     public override async Task<PromtResponse> SendMessage(PromtRequest request, ServerCallContext context)
     {
 
-        string response = await rabbitMQClient.SendMessageAsync(request.Message);
+        string response = await rabbitMQClient.SendMessageAsync(request);
 
         return new PromtResponse { Response = response };
     }
