@@ -8,7 +8,7 @@ namespace TelegramBot
     public static class Configuration
     {
         public const string BOT_TOKEN = "";
-        public const long CHAT_ID = ;
+        public const long CHAT_ID = -;
         public const string API_KEY = "";
     }
 }

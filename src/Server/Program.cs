@@ -24,3 +24,5 @@ var app = builder.Build();
 app.MapGrpcService<ServiceAI>();
 
 app.Run();
+
+System.Console.WriteLine("Start");

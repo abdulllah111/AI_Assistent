@@ -21,7 +21,6 @@ namespace TelegramBot
         private ITelegramBotClient _botClient;
         private GrpcClient _grpcClient;
         private CancellationTokenSource _cts = new CancellationTokenSource();
-
         private ReceiverOptions receiverOptions = new ()
         {
             AllowedUpdates = Array.Empty<UpdateType>()
@@ -80,13 +79,39 @@ namespace TelegramBot
             Console.WriteLine("Response: " + response);
             
 
-            Message sentMessage = await _botClient.SendTextMessageAsync(
-            chatId: _chatId,
-            text: response,
-            cancellationToken: cancellationToken,
-            replyToMessageId: message.MessageId
-            );
+            // Message sentMessage = await _botClient.SendTextMessageAsync(
+            // chatId: _chatId,
+            // text: response,
+            // cancellationToken: cancellationToken,
+            // replyToMessageId: !isReply ? message.MessageId : null
+            // );
            
+            try
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: response,
+                cancellationToken: cancellationToken,
+                replyToMessageId: message.MessageId
+                );
+            }
+            catch (ApiRequestException ex) when (ex.Message == "Bad Request: replied message not found") 
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                    chatId: _chatId,
+                    text: response,
+                    cancellationToken: cancellationToken
+                );
+            }
+            catch (ApiRequestException ex) when (ex.Message == "Bad Request: message text is empty")
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                    chatId: _chatId,
+                    text: "После таких слов я сломалась",
+                    cancellationToken: cancellationToken,
+                    replyToMessageId: message.MessageId
+                );
+            }
 
             await Task.Delay(10);
 

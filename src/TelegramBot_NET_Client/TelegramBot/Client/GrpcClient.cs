@@ -12,7 +12,7 @@ public class GrpcClient
         var httpHandler = new HttpClientHandler();
         httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
-        var channel = GrpcChannel.ForAddress("https://localhost:7241", new GrpcChannelOptions { HttpHandler = httpHandler }); // Замените на адрес вашего gRPC-сервиса
+        var channel = GrpcChannel.ForAddress("http://localhost:5023", new GrpcChannelOptions { HttpHandler = httpHandler }); // Замените на адрес вашего gRPC-сервиса
         _client = new TelegramClientService.TelegramClientServiceClient(channel);
     }
     
