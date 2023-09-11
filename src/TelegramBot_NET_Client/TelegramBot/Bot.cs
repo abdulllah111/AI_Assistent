@@ -11,7 +11,6 @@ using Telegram.Bot.Types.Enums;
 using RestSharp;
 using TelegramBot.Client;
 
-
 namespace TelegramBot
 {
 
@@ -107,7 +106,7 @@ namespace TelegramBot
             {
                 Message sentMessage = await _botClient.SendTextMessageAsync(
                     chatId: _chatId,
-                    text: "После таких слов я сломалась",
+                    text: $"После этого сообщения я сломалась...   \n{ex.Message}",
                     cancellationToken: cancellationToken,
                     replyToMessageId: message.MessageId
                 );
