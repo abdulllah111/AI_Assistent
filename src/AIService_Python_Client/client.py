@@ -12,7 +12,7 @@ def callback(ch, method, properties, body):
     
     message = PromtRequest()
     message.ParseFromString(body)
-    5
+    
     response = gpt.Generate(message.message, message.userid)
     
     

@@ -830,11 +830,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
+      "projectUniqueName": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
       "projectName": "Server",
-      "projectPath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
+      "projectPath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
       "packagesPath": "/home/abdul/.nuget/packages/",
-      "outputPath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/obj/",
+      "outputPath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/abdul/.nuget/NuGet/NuGet.Config"
@@ -899,7 +899,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.110/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.112/RuntimeIdentifierGraph.json"
       }
     }
   }

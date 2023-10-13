@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xwx63LseLlZ06KXDhXxjAgJC33Q3D8oQyNOR2NrGI+N7fGwGD08QyBtReyKRnYHEVJk5LbjOR/RcYWOgYOlrhA==",
+  "dgSpecHash": "3PNxhXq3yMxuuSKsUpsb80u5gz5IJ3kMY9aLEdZ7L7QVtwsChJkzYOlkR53MQu0PPGH8YAxmQ0tTD3noihf9dg==",
   "success": true,
-  "projectFilePath": "/run/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj",
+  "projectFilePath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj",
   "expectedPackageFiles": [
     "/home/abdul/.nuget/packages/google.protobuf/3.24.2/google.protobuf.3.24.2.nupkg.sha512",
     "/home/abdul/.nuget/packages/grpc.core.api/2.56.0/grpc.core.api.2.56.0.nupkg.sha512",

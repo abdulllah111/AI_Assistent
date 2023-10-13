@@ -62,8 +62,8 @@ namespace TelegramBot
 
 
             //Только в выбранном чате
-            if(message.Chat.Id != _chatId)
-                return;
+            // if(message.Chat.Id != _chatId)
+            //     return;
             
 
             var isExist = await IsMessageExistsAsync(_botClient, message);
@@ -74,7 +74,10 @@ namespace TelegramBot
             if(chatMember.Status == ChatMemberStatus.Kicked)
                 return;
 
-            string response = await _grpcClient.SendMessage(messageText, message.From.Id.ToString());
+            if(!messageText.Contains("@abdul_assistent_ai_bot "))
+                return;
+
+            string response = await _grpcClient.SendMessage(messageText.Replace("@abdul_assistent_ai_bot ", ""), message.From.Id.ToString());
             Console.WriteLine("Response: " + response);
             
 
@@ -85,10 +88,39 @@ namespace TelegramBot
             // replyToMessageId: !isReply ? message.MessageId : null
             // );
            
+
+            /// Работа в беседе
+            // try
+            // {
+            //     Message sentMessage = await _botClient.SendTextMessageAsync(
+            //     chatId: _chatId,
+            //     text: response,
+            //     cancellationToken: cancellationToken,
+            //     replyToMessageId: message.MessageId
+            //     );
+            // }
+            // catch (ApiRequestException ex) when (ex.Message == "Bad Request: replied message not found") 
+            // {
+            //     Message sentMessage = await _botClient.SendTextMessageAsync(
+            //         chatId: _chatId,
+            //         text: response,
+            //         cancellationToken: cancellationToken
+            //     );
+            // }
+            // catch (ApiRequestException ex) when (ex.Message == "Bad Request: message text is empty")
+            // {
+            //     Message sentMessage = await _botClient.SendTextMessageAsync(
+            //         chatId: _chatId,
+            //         text: $"После этого сообщения я сломалась...   \n{ex.Message}",
+            //         cancellationToken: cancellationToken,
+            //         replyToMessageId: message.MessageId
+            //     );
+            // }
+
             try
             {
                 Message sentMessage = await _botClient.SendTextMessageAsync(
-                chatId: _chatId,
+                chatId: message.Chat.Id,
                 text: response,
                 cancellationToken: cancellationToken,
                 replyToMessageId: message.MessageId
@@ -97,7 +129,7 @@ namespace TelegramBot
             catch (ApiRequestException ex) when (ex.Message == "Bad Request: replied message not found") 
             {
                 Message sentMessage = await _botClient.SendTextMessageAsync(
-                    chatId: _chatId,
+                    chatId: message.Chat.Id,
                     text: response,
                     cancellationToken: cancellationToken
                 );
@@ -105,7 +137,7 @@ namespace TelegramBot
             catch (ApiRequestException ex) when (ex.Message == "Bad Request: message text is empty")
             {
                 Message sentMessage = await _botClient.SendTextMessageAsync(
-                    chatId: _chatId,
+                    chatId: message.Chat.Id,
                     text: $"После этого сообщения я сломалась...   \n{ex.Message}",
                     cancellationToken: cancellationToken,
                     replyToMessageId: message.MessageId
