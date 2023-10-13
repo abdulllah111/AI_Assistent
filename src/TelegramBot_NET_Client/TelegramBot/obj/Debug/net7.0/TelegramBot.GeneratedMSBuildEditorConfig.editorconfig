@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = TelegramBot
-build_property.ProjectDir = /run/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/
+build_property.ProjectDir = /media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/

@@ -1,43 +1,66 @@
+from __future__ import annotations
+
 import json
 
-import requests
+from ..typing import AsyncResult, Messages
+from ..requests import StreamSession
+from .base_provider import AsyncGeneratorProvider, format_prompt, get_cookies
 
-from ..typing import Any, CreateResult
-from .base_provider import BaseProvider
 
-
-class AItianhu(BaseProvider):
-    url = "https://www.aitianhu.com/"
-    working = False
+class AItianhu(AsyncGeneratorProvider):
+    url = "https://www.aitianhu.com"
+    working = True
     supports_gpt_35_turbo = True
 
-    @staticmethod
-    def create_completion(
+    @classmethod
+    async def create_async_generator(
+        cls,
         model: str,
-        messages: list[dict[str, str]],
-        stream: bool, **kwargs: Any) -> CreateResult:
-        
-        base = ""
-        for message in messages:
-            base += "%s: %s\n" % (message["role"], message["content"])
-        base += "assistant:"
-
-        headers = {
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-        }
-        data: dict[str, Any] = {
-            "prompt": base,
+        messages: Messages,
+        proxy: str = None,
+        cookies: dict = None,
+        timeout: int = 120,
+        **kwargs
+    ) -> AsyncResult:
+        if not cookies:
+            cookies = get_cookies("www.aitianhu.com")
+        data = {
+            "prompt": format_prompt(messages),
             "options": {},
-            "systemMessage": "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully. Respond using markdown.",
-            "temperature": kwargs.get("temperature", 0.8),
-            "top_p": kwargs.get("top_p", 1),
+            "systemMessage": "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully.",
+            "temperature": 0.8,
+            "top_p": 1,
+            **kwargs
         }
-        url = "https://www.aitianhu.com/api/chat-process"
-        response = requests.post(url, headers=headers, json=data)
-        response.raise_for_status()
-        lines = response.text.strip().split("\n")
-        res = json.loads(lines[-1])
-        yield res["text"]
+        headers = {
+            "Authority": cls.url,
+            "Accept": "application/json, text/plain, */*",
+            "Origin": cls.url,
+            "Referer": f"{cls.url}/"
+        }
+        async with StreamSession(
+            headers=headers,
+            cookies=cookies,
+            timeout=timeout,
+            proxies={"https": proxy},
+            impersonate="chrome107",
+            verify=False
+        ) as session:
+            async with session.post(f"{cls.url}/api/chat-process", json=data) as response:
+                response.raise_for_status()
+                async for line in response.iter_lines():
+                    if line == b"<script>":
+                        raise RuntimeError("Solve challenge and pass cookies")
+                    if b"platform's risk control" in line:
+                        raise RuntimeError("Platform's Risk Control")
+                    line = json.loads(line)
+                    if "detail" in line:
+                        content = line["detail"]["choices"][0]["delta"].get("content")
+                        if content:
+                            yield content
+                    else:
+                        raise RuntimeError(f"Response: {line}")
+
 
     @classmethod
     @property
@@ -46,6 +69,7 @@ class AItianhu(BaseProvider):
             ("model", "str"),
             ("messages", "list[dict[str, str]]"),
             ("stream", "bool"),
+            ("proxy", "str"),
             ("temperature", "float"),
             ("top_p", "int"),
         ]

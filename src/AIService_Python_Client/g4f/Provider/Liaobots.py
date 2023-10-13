@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import uuid
-import json
+
 from aiohttp import ClientSession
 
-from ..typing import AsyncGenerator
+from ..typing import AsyncResult, Messages
 from .base_provider import AsyncGeneratorProvider
 
 models = {
@@ -27,9 +29,8 @@ models = {
 }
 
 class Liaobots(AsyncGeneratorProvider):
-    url = "https://liaobots.com"
+    url = "https://liaobots.site"
     working = True
-    supports_stream = True
     supports_gpt_35_turbo = True
     supports_gpt_4 = True
     _auth_code = None
@@ -38,29 +39,39 @@ class Liaobots(AsyncGeneratorProvider):
     async def create_async_generator(
         cls,
         model: str,
-        messages: list[dict[str, str]],
+        messages: Messages,
         auth: str = None,
         proxy: str = None,
         **kwargs
-    ) -> AsyncGenerator:
-        if proxy and "://" not in proxy:
-            proxy = f"http://{proxy}"
+    ) -> AsyncResult:
+        model = model if model in models else "gpt-3.5-turbo"
         headers = {
             "authority": "liaobots.com",
             "content-type": "application/json",
-            "origin": "https://liaobots.com",
-            "referer": "https://liaobots.com/",
+            "origin": cls.url,
+            "referer": cls.url + "/",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
         }
         async with ClientSession(
             headers=headers
         ) as session:
-            model = model if model in models else "gpt-3.5-turbo"
-            auth_code = auth if isinstance(auth, str) else cls._auth_code
-            if not auth_code:
-                async with session.post("https://liaobots.com/api/user", proxy=proxy, json={"authcode": ""}) as response:
+            cls._auth_code = auth if isinstance(auth, str) else cls._auth_code
+            if not cls._auth_code:
+                async with session.post(
+                    "https://liaobots.work/recaptcha/api/login",
+                    proxy=proxy,
+                    data={"token": "abcdefghijklmnopqrst"},
+                    verify_ssl=False
+                ) as response:
                     response.raise_for_status()
-                    auth_code = cls._auth_code = json.loads((await response.text()))["authCode"]
+                async with session.post(
+                    "https://liaobots.work/api/user",
+                    proxy=proxy,
+                    json={"authcode": ""},
+                    verify_ssl=False
+                ) as response:
+                    response.raise_for_status()
+                    cls._auth_code = (await response.json(content_type=None))["authCode"]
             data = {
                 "conversationId": str(uuid.uuid4()),
                 "model": models[model],
@@ -68,10 +79,17 @@ class Liaobots(AsyncGeneratorProvider):
                 "key": "",
                 "prompt": "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully.",
             }
-            async with session.post("https://liaobots.com/api/chat", proxy=proxy, json=data, headers={"x-auth-code": auth_code}) as response:
+            async with session.post(
+                "https://liaobots.work/api/chat",
+                proxy=proxy,
+                json=data,
+                headers={"x-auth-code": cls._auth_code},
+                verify_ssl=False
+            ) as response:
                 response.raise_for_status()
-                async for line in response.content:
-                    yield line.decode("utf-8")
+                async for stream in response.content.iter_any():
+                    if stream:
+                        yield stream.decode()
 
 
     @classmethod
