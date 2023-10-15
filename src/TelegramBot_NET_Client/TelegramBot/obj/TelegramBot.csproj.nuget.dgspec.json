@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj": {}
+    "/home/abdul/Projects/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj": {}
   },
   "projects": {
-    "/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj": {
+    "/home/abdul/Projects/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj",
+        "projectUniqueName": "/home/abdul/Projects/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj",
         "projectName": "TelegramBot",
-        "projectPath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj",
+        "projectPath": "/home/abdul/Projects/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/TelegramBot.csproj",
         "packagesPath": "/home/abdul/.nuget/packages/",
-        "outputPath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/obj/",
+        "outputPath": "/home/abdul/Projects/AI_Assistent/src/TelegramBot_NET_Client/TelegramBot/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/abdul/.nuget/NuGet/NuGet.Config"

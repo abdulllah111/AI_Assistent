@@ -88,36 +88,36 @@ namespace TelegramBot
         // Извлекаем сообщение из очереди
         if (_sendQueue.TryDequeue(out var queuedMessage))
         {
-            try{
-                System.Console.WriteLine(queuedMessage.Text);
-                // Отправляем запрос на сервер
-                string response_json = await _grpcClient.SendMessage(queuedMessage.Text.Replace("@abdul_assistent_ai_bot ", ""), queuedMessage.From.Id.ToString());
-                var response = Response.FromJson(response_json);
-            
-                // Отправляем ответ в Telegram
-                var responseTasks = response.Select(async mess =>
-                {
-                    Message sentMessage = await _botClient.SendTextMessageAsync(
-                        chatId: queuedMessage.Chat.Id,
-                        text: $"{mess.Title}\n\n {mess.Text}",
-                        cancellationToken: cancellationToken,
-                        replyToMessageId: queuedMessage.MessageId
-                    );
+            System.Console.WriteLine(queuedMessage.Text);
+            // Отправляем запрос на сервер
+            string response_json = await _grpcClient.SendMessage(queuedMessage.Text.Replace("@abdul_assistent_ai_bot ", ""), queuedMessage.From.Id.ToString());
 
-                    return sentMessage;
-                });
-                await Task.WhenAll(responseTasks);
-            }
-            catch{
+            if(response_json == "NoN"){
                 await _botClient.SendTextMessageAsync(
-                        chatId: queuedMessage.Chat.Id,
-                        text: $"No no no",
-                        cancellationToken: cancellationToken,
-                        replyToMessageId: queuedMessage.MessageId
-                    );
+                    chatId: queuedMessage.Chat.Id,
+                    text: $"No no no",
+                    cancellationToken: cancellationToken,
+                    replyToMessageId: queuedMessage.MessageId
+                );
                 return;
             }
 
+            var response = Response.FromJson(response_json);
+            // Отправляем ответ в Telegram
+            var responseTasks = response.Select(async mess =>
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                    chatId: queuedMessage.Chat.Id,
+                    text: $"{mess.Title}\n\n {mess.Text}",
+                    cancellationToken: cancellationToken,
+                    replyToMessageId: queuedMessage.MessageId
+                );
+
+                return sentMessage;
+            });
+            await Task.WhenAll(responseTasks);
+            
+            
             // string response = await _grpcClient.SendMessage(queuedMessage.Text.Replace("@abdul_assistent_ai_bot ", ""), queuedMessage.From.Id.ToString());
             // await _botClient.SendTextMessageAsync(
             //         chatId: queuedMessage.Chat.Id,
