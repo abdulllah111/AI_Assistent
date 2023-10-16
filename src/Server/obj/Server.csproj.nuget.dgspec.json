@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj": {}
+    "/home/abdul/Projects/AiBlog/Server/Server.csproj": {}
   },
   "projects": {
-    "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj": {
+    "/home/abdul/Projects/AiBlog/Server/Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
+        "projectUniqueName": "/home/abdul/Projects/AiBlog/Server/Server.csproj",
         "projectName": "Server",
-        "projectPath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
+        "projectPath": "/home/abdul/Projects/AiBlog/Server/Server.csproj",
         "packagesPath": "/home/abdul/.nuget/packages/",
-        "outputPath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/obj/",
+        "outputPath": "/home/abdul/Projects/AiBlog/Server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/abdul/.nuget/NuGet/NuGet.Config"
