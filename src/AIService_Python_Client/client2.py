@@ -6,6 +6,29 @@ from Protos.assistantai_pb2 import PromtRequest
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
 channel.queue_declare(queue='aisite_request_queue')
+channel.queue_declare(queue='aisite_response_queue')
+
+
+def generate_titles(message):
+    context_for_titles = [] 
+    context_for_titles.append({"role": "system", "content": "Ты являешься копирайтером блога."})
+    context_for_titles.append({"role": "user", "content": "Твоя цель составить 5 заголовков для статей блога. Ключевые слова: спорт, похудение, правильное питание, набор мышечной массы. Предоставь ответ конкретно в виде: заголовок1;заголовок2;заголовокn"})
+    context_for_titles.append({"role": "assistant", "content": "5 эффективных упражнений для спорта и похудения;Как правильное питание помогает достичь идеальной формы;Секреты набора мышечной массы при занятиях спортом;Пять правил правильного питания для успешного похудения;Как спорт и правильное питание влияют на физическую форму и самочувствие"})
+    context_for_titles.append({"role": "user", "content": "Твоя цель составить 5 заголовков для статей блога. Ключевые слова: мода, стильная одежда, стиль. Предоставить ответ конкретно в виде: заголовок1;заголовок2;заголовокn"})
+    context_for_titles.append({"role": "assistant", "content": "Топ-10 модных трендов этого сезона;Как создать стильный образ с минимальными затратами;Секреты стильной одежды для каждого типа фигуры;5 основных правил стильного образа;Как создать свой уникальный стиль"})
+    context_for_titles.append({"role": "user", "content": "Мотивация, успех, стремление"})
+    context_for_titles.append({"role": "assistant", "content": "Как найти мотивацию для достижения успеха;Как его достичь и сохранить;Как стремление к достижению целей влияет на нашу жизнь;Кекреты постоянного движения вперед;Как преодолеть трудности и достичь успеха"})
+
+    
+    context_for_titles.append({"role": "user", "content": message})  
+    titles = gpt.Generate(context_for_titles)
+    if ";" in titles:
+        titles = titles.split(";")
+    else:
+        return "NoN"
+    return titles
+
+
 
 
 def generate_text(title):
@@ -23,33 +46,26 @@ def generate_text(title):
     return {"title": title, "text": gpt.Generate(_context_for_text)}
 
 
+def callback(ch, method, properties, body):
+    print(" [x] Received %r" % body)
     
-def generate_posts(message):
-    context_for_titles = [] 
-    context_for_titles.append({"role": "system", "content": "Ты являешься копирайтером блога."})
-    context_for_titles.append({"role": "user", "content": "Твоя цель составить 5 заголовков для статей блога. Ключевые слова: спорт, похудение, правильное питание, набор мышечной массы. Предоставь ответ конкретно в виде: заголовок1;заголовок2;заголовокn"})
-    context_for_titles.append({"role": "assistant", "content": "5 эффективных упражнений для спорта и похудения;Как правильное питание помогает достичь идеальной формы;Секреты набора мышечной массы при занятиях спортом;Пять правил правильного питания для успешного похудения;Как спорт и правильное питание влияют на физическую форму и самочувствие"})
-    context_for_titles.append({"role": "user", "content": "Твоя цель составить 5 заголовков для статей блога. Ключевые слова: мода, стильная одежда, стиль. Предоставить ответ конкретно в виде: заголовок1;заголовок2;заголовокn"})
-    context_for_titles.append({"role": "assistant", "content": "Топ-10 модных трендов этого сезона;Как создать стильный образ с минимальными затратами;Секреты стильной одежды для каждого типа фигуры;5 основных правил стильного образа;Как создать свой уникальный стиль"})
-    context_for_titles.append({"role": "user", "content": "Мотивация, успех, стремление"})
-    context_for_titles.append({"role": "assistant", "content": "Как найти мотивацию для достижения успеха;Как его достичь и сохранить;Как стремление к достижению целей влияет на нашу жизнь;Кекреты постоянного движения вперед;Как преодолеть трудности и достичь успеха"})
+    message = PromtRequest()
+    message.ParseFromString(body)
 
-
-    context_for_titles.append({"role": "user", "content": message})  
-    titles = gpt.Generate(context_for_titles)
-    if ";" in titles:
-        titles = titles.split(";")
-    else:
-        return "NoN"
-    response = []
-    thread_results = []
+    titles = generate_titles(message.message)
+    
     lock = threading.Lock()
 
     def process_title(title):
         result = generate_text(title)
         with lock:
-            response.append(result)
+            ch.basic_publish(exchange='',
+                         routing_key='aisite_response_queue',
+                         properties=pika.BasicProperties(
+                             correlation_id=properties.correlation_id),
+                         body=str(result))
 
+    
     # Создаем и запускаем потоки для обработки каждого заголовка
     threads = []
     for title in titles:
@@ -60,35 +76,19 @@ def generate_posts(message):
     # Ждем завершения всех потоков
     for thread in threads:
         thread.join()
-    
-    return response
-
-def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
-    
-    message = PromtRequest()
-    message.ParseFromString(body)
-
-
-    response = generate_posts(message.message)
-    # response = "test"
-
 
     ch.basic_publish(exchange='',
-                     routing_key='aisite_response_queue',
-                     properties=pika.BasicProperties(
-                         correlation_id=properties.correlation_id),
-                     body=str(response))
-    
-    ch.basic_publish(exchange='',
-                     routing_key='aisite_response_queue',
-                     properties=pika.BasicProperties(
-                         correlation_id=properties.correlation_id),
-                     body="last_response")
+                         routing_key='aisite_response_queue',
+                         properties=pika.BasicProperties(
+                             correlation_id=properties.correlation_id),
+                         body="last_response")
     ch.basic_ack(delivery_tag=method.delivery_tag)
+
 
 channel.basic_consume(queue='aisite_request_queue',
                       on_message_callback=callback)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
+
+

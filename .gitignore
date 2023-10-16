@@ -1,0 +1,17 @@
+Server/.vscode/*
+!Server/.vscode/settings.json
+!Server/.vscode/tasks.json
+!Server/.vscode/launch.json
+!Server/.vscode/extensions.json
+!Server/.vscode/*.code-snippets
+Server/bin/*
+Server/obj/*
+TelegramBot_NET_Client/TelegramBot/.vscode/*
+!TelegramBot_NET_Client/TelegramBot/.vscode/settings.json
+!TelegramBot_NET_Client/TelegramBot/.vscode/tasks.json
+!TelegramBot_NET_Client/TelegramBot/.vscode/launch.json
+!TelegramBot_NET_Client/TelegramBot/.vscode/extensions.json
+!TelegramBot_NET_Client/TelegramBot/.vscode/*.code-snippets
+TelegramBot_NET_Client/TelegramBot/bin/*
+TelegramBot_NET_Client/TelegramBot/obj/*
+TelegramBot_NET_Client/TelegramBot/Configuration.cs

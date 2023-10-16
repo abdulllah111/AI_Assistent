@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QCfjz+PeZDdAXHZc1wHDBLA3hY8ypyj+ic8AdugCecD1oEq4XZ46UpQJwo9pRN0XsPWZJI/7mcsPeVzjO09I3g==",
+  "dgSpecHash": "nnxgHsagF2aBfIK8EE8hllJhskksMDyJcdVxf3FvWUnlhSeT41mEQxWg0Qtmw2o0i46gEfCogdLiGI9a1+il/A==",
   "success": true,
-  "projectFilePath": "/media/abdul/App/MyProjects/NET/AI_Assistent/src/Server/Server.csproj",
+  "projectFilePath": "/home/abdul/Projects/AiBlog/Server/Server.csproj",
   "expectedPackageFiles": [
     "/home/abdul/.nuget/packages/google.protobuf/3.24.2/google.protobuf.3.24.2.nupkg.sha512",
     "/home/abdul/.nuget/packages/grpc.aspnetcore/2.49.0/grpc.aspnetcore.2.49.0.nupkg.sha512",

@@ -21,8 +21,17 @@ public class ServiceAI : TelegramClientService.TelegramClientServiceBase
     public override async Task<PromtResponse> SendMessage(PromtRequest request, ServerCallContext context)
     {
 
-        string response = await rabbitMQClient.SendMessageAsync(request);
+        var response = await rabbitMQClient.SendMessageAsync(request);
+        var res = "[";
 
-        return new PromtResponse { Response = response };
+        if(response[0] != "NoN"){
+            foreach (var item in response)
+            {
+                res += $"{item},";
+            }
+            return new PromtResponse { Response = $"{res}]"};
+        }
+        return new PromtResponse { Response = response[0] };
+        
     }
 }
